@@ -1,0 +1,50 @@
+# Dependencies
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker
+docker-compose.override.yml
+
+# Local storage
+data/uploads/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test / Coverage
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Node (frontend)
+node_modules/
+frontend/dist/
+
+# Alembic
+db/migrations/versions/__pycache__/
+
+# mypy
+.mypy_cache/

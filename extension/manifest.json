@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Job Application Assistant - LinkedIn Detector",
+  "version": "1.0.0",
+  "description": "Automatically detects hiring posts on LinkedIn and forwards them to your Job Application Assistant account.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://www.linkedin.com/*"
+  ],
+  "content_scripts": [{
+    "matches": [
+      "https://www.linkedin.com/feed*",
+      "https://www.linkedin.com/in/*",
+      "https://www.linkedin.com/posts/*"
+    ],
+    "js": ["content.js"]
+  }],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.svg",
+      "48": "icons/icon48.svg",
+      "128": "icons/icon128.svg"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.svg",
+    "48": "icons/icon48.svg",
+    "128": "icons/icon128.svg"
+  }
+}

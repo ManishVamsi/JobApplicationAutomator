@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 320px;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+      padding: 16px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #334155;
+    }
+    .logo {
+      width: 32px;
+      height: 32px;
+      background: #6366f1;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .title { font-size: 14px; font-weight: 600; }
+    .subtitle { font-size: 11px; color: #94a3b8; }
+    label {
+      display: block;
+      font-size: 12px;
+      color: #94a3b8;
+      margin-bottom: 4px;
+      margin-top: 12px;
+    }
+    input {
+      width: 100%;
+      padding: 8px 10px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      color: #f1f5f9;
+      font-size: 12px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input:focus { border-color: #6366f1; }
+    input::placeholder { color: #64748b; }
+    .btn {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-top: 12px;
+    }
+    .btn-primary { background: #6366f1; color: white; }
+    .btn-primary:hover { background: #818cf8; }
+    .btn-secondary { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
+    .btn-secondary:hover { background: #334155; color: #f1f5f9; }
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .status-connected { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .status-connected .status-dot { background: #22c55e; }
+    .status-error { background: rgba(239,68,68,0.15); color: #ef4444; }
+    .status-error .status-dot { background: #ef4444; }
+    .status-idle { background: #1e293b; color: #64748b; }
+    .status-idle .status-dot { background: #64748b; }
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding: 10px;
+      background: #1e293b;
+      border-radius: 6px;
+      border: 1px solid #334155;
+    }
+    .stat-value { font-size: 18px; font-weight: 700; color: #6366f1; }
+    .stat-label { font-size: 10px; color: #64748b; text-transform: uppercase; }
+    .token-display {
+      font-family: monospace;
+      font-size: 11px;
+      color: #94a3b8;
+      background: #1e293b;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">⚡</div>
+    <div>
+      <div class="title">Job App Assistant</div>
+      <div class="subtitle">LinkedIn Post Detector</div>
+    </div>
+  </div>
+
+  <label>Backend API URL</label>
+  <input id="apiUrl" type="url" placeholder="https://your-app.onrender.com">
+
+  <label>Extension API Token</label>
+  <input id="apiToken" type="password" placeholder="jaa_...">
+  <div id="tokenPrefix" class="token-display" style="display:none;"></div>
+
+  <button id="saveBtn" class="btn btn-primary">Save Settings</button>
+  <button id="testBtn" class="btn btn-secondary">Test Connection</button>
+
+  <div id="status" class="status status-idle">
+    <span class="status-dot"></span>
+    <span id="statusText">Not configured</span>
+  </div>
+
+  <div class="stats">
+    <div>
+      <div id="postCount" class="stat-value">0</div>
+      <div class="stat-label">Posts Detected</div>
+    </div>
+    <div>
+      <div id="lastPost" class="stat-value">—</div>
+      <div class="stat-label">Last Post</div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
