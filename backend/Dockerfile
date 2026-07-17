@@ -2,6 +2,7 @@
 FROM python:3.12-slim AS builder
 
 WORKDIR /app
+ENV PYTHONPATH=/app
 
 # Install system deps for building Python packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
