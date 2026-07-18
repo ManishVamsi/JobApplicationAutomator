@@ -13,27 +13,31 @@ services:
       - ./backend:/app
       - upload-data:/app/data/uploads
 
-  celery-worker:
-    build: ./backend
-    command: celery -A app.workers.celery_app worker -l info -c 2
-    env_file: ./backend/.env
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    volumes:
-      - ./backend:/app
-
-  celery-beat:
-    build: ./backend
-    command: celery -A app.workers.celery_app beat -l info
-    env_file: ./backend/.env
-    depends_on:
-      redis:
-        condition: service_healthy
-    volumes:
-      - ./backend:/app
+  # --- Celery services (no longer required) ---
+  # Task dispatching now uses FastAPI BackgroundTasks + admin cron endpoints.
+  # Kept here for reference in case a move to a real task queue is needed later.
+  #
+  # celery-worker:
+  #   build: ./backend
+  #   command: celery -A app.workers.celery_app worker -l info -c 2
+  #   env_file: ./backend/.env
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./backend:/app
+  #
+  # celery-beat:
+  #   build: ./backend
+  #   command: celery -A app.workers.celery_app beat -l info
+  #   env_file: ./backend/.env
+  #   depends_on:
+  #     redis:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./backend:/app
 
   postgres:
     image: postgres:16-alpine

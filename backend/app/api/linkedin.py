@@ -2,7 +2,7 @@
 
 from datetime import UTC, datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import (
@@ -34,6 +34,7 @@ linkedin_service = LinkedInPostService()
 async def ingest_post(
     body: LinkedInPostIngest,
     request: Request,
+    background_tasks: BackgroundTasks,
     user: User = Depends(get_current_user_from_api_token),
     db: AsyncSession = Depends(get_db),
     redis: object = Depends(get_redis),
@@ -84,6 +85,11 @@ async def ingest_post(
 
     if post is None:
         return {"message": "Duplicate post — already ingested.", "duplicate": True}
+
+    # Dispatch scoring as a background task
+    from app.services.background_tasks import run_score_linkedin_posts
+
+    background_tasks.add_task(run_score_linkedin_posts, user_id)
 
     return {
         "id": str(post.id),
@@ -137,6 +143,7 @@ async def list_posts(
 @router.post("/manual", status_code=status.HTTP_201_CREATED)
 async def manual_add(
     body: LinkedInPostIngest,
+    background_tasks: BackgroundTasks,
     user: CurrentUser,
     db: DbSession,
 ) -> dict:
@@ -152,6 +159,11 @@ async def manual_add(
 
     if post is None:
         return {"message": "Duplicate post.", "duplicate": True}
+
+    # Dispatch scoring as a background task
+    from app.services.background_tasks import run_score_linkedin_posts
+
+    background_tasks.add_task(run_score_linkedin_posts, str(user.id))
 
     return {
         "id": str(post.id),

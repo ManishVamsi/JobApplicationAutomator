@@ -2,7 +2,7 @@
 
 from datetime import UTC, datetime
 
-from fastapi import APIRouter, HTTPException, UploadFile, status
+from fastapi import APIRouter, BackgroundTasks, HTTPException, UploadFile, status
 
 from app.api.deps import CurrentUser, DbSession
 from app.schemas.user import ApiTokenInfo, ApiTokenResponse, UserProfile, UserUpdate
@@ -65,12 +65,13 @@ async def update_profile(
 @router.post("/me/resume", status_code=status.HTTP_201_CREATED)
 async def upload_resume(
     file: UploadFile,
+    background_tasks: BackgroundTasks,
     user: CurrentUser,
     db: DbSession,
 ) -> dict:
     """Upload a PDF/DOCX resume (max 10MB).
 
-    Stores in object storage, triggers LLM-based parsing.
+    Stores in object storage, dispatches LLM-based parsing as a background task.
     Re-upload replaces the previous resume.
     """
     if file.content_type not in ALLOWED_CONTENT_TYPES:
@@ -96,10 +97,12 @@ async def upload_resume(
         file.content_type or "application/pdf",
     )
 
-    # Extract text and queue parsing task
+    # Extract text and dispatch background parsing
     try:
         text = ResumeService.extract_text(file_bytes, file.content_type or "")
-        # TODO: Queue Celery task for LLM parsing with extracted text
+        from app.services.background_tasks import run_parse_resume
+
+        background_tasks.add_task(run_parse_resume, str(user.id), text)
     except Exception:
         pass  # Text extraction failure is non-fatal; resume is still stored
 

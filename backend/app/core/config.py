@@ -91,6 +91,9 @@ class Settings(BaseSettings):
     RATE_LIMIT_GENERAL: int = 60  # per minute per IP
     RATE_LIMIT_LINKEDIN_INGEST: int = 30  # per minute per user_id
 
+    # --- Admin ---
+    ADMIN_TRIGGER_SECRET: str = ""  # generate with: openssl rand -hex 32
+
     @property
     def is_production(self) -> bool:
         return self.ENVIRONMENT == Environment.PRODUCTION

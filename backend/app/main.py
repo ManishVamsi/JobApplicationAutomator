@@ -5,7 +5,7 @@ from collections.abc import AsyncGenerator
 
 from fastapi import FastAPI
 
-from app.api import auth, health, jobs, linkedin, portals, users
+from app.api import admin, auth, health, jobs, linkedin, portals, users
 from app.core.config import get_settings
 from app.core.logging import RequestIdMiddleware, setup_logging
 from app.core.middleware import setup_cors
@@ -55,6 +55,7 @@ app.include_router(users.router, prefix=API_PREFIX)
 app.include_router(portals.router, prefix=API_PREFIX)
 app.include_router(jobs.router, prefix=API_PREFIX)
 app.include_router(linkedin.router, prefix=API_PREFIX)
+app.include_router(admin.router, prefix=API_PREFIX)
 
 
 @app.get("/")

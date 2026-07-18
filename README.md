@@ -13,11 +13,19 @@ AI-powered multi-user web application that helps you discover, filter, and track
 └──────────────┘    └──────────────┘    └──────────────┘
                           │
                     ┌─────┴─────┐
-                    │   Celery  │
-                    │  Workers  │
-                    │ (Groq LLM)│
+                    │  Groq LLM │  ← scoring runs in-process
+                    │  JSearch  │    via BackgroundTasks
                     └───────────┘
+                          ▲
+                    External cron  ← triggers /admin/trigger-job-fetch
 ```
+
+> **No separate worker process required.** Resume parsing and post scoring run
+> as FastAPI `BackgroundTasks` inside the web process. Daily job fetching and
+> monthly quota resets are triggered by external cron services (e.g.,
+> cron-job.org, GitHub Actions) hitting protected admin endpoints. The Celery
+> app/task files remain in the repo (`app/workers/`) unused, in case a future
+> move to a real task queue is needed.
 
 ## Tech Stack
 
@@ -29,7 +37,7 @@ AI-powered multi-user web application that helps you discover, filter, and track
 | **LLM** | Groq API (Llama 3.3 70B) |
 | **Jobs API** | JSearch (RapidAPI) |
 | **Email** | Resend |
-| **Task Queue** | Celery + Redis |
+| **Background Tasks** | FastAPI BackgroundTasks + external cron (no Celery required) |
 | **Auth** | Passwordless OTP + JWT (PyJWT) |
 | **Extension** | Chrome Manifest V3 |
 
@@ -66,12 +74,12 @@ npm run dev
 JobApplicationAutomator/
 ├── backend/
 │   ├── app/
-│   │   ├── api/           # FastAPI routers (auth, users, portals, jobs, linkedin, health)
+│   │   ├── api/           # FastAPI routers (auth, users, portals, jobs, linkedin, health, admin)
 │   │   ├── core/          # Config, security, database, logging, middleware
 │   │   ├── models/        # SQLAlchemy models (8 tables)
 │   │   ├── schemas/       # Pydantic request/response schemas
-│   │   ├── services/      # Business logic (8 service classes)
-│   │   └── workers/       # Celery app + tasks (fetch, score, parse)
+│   │   ├── services/      # Business logic (8 services) + background_tasks.py
+│   │   └── workers/       # [UNUSED] Celery app + tasks (kept for future reference)
 │   ├── db/migrations/     # Alembic migrations
 │   ├── scripts/           # Operational scripts (key rotation)
 │   ├── tests/             # pytest (15 tests)
@@ -120,6 +128,9 @@ GROQ_API_KEY=your-groq-key
 JSEARCH_API_KEY=your-rapidapi-key
 RESEND_API_KEY=your-resend-key
 
+# Admin (for external cron triggers)
+ADMIN_TRIGGER_SECRET=<openssl rand -hex 32>
+
 # Optional
 ENVIRONMENT=local|production
 FRONTEND_URL=http://localhost:5173
@@ -141,11 +152,27 @@ python -m backend.scripts.rotate_master_key
 # 4. Restart services
 ```
 
+### Job Fetching (External Cron)
+
+Daily job fetching is triggered by an external cron hitting the admin endpoint:
+```bash
+# Daily (e.g., 06:00 UTC via cron-job.org or GitHub Actions)
+curl -X POST https://your-backend.onrender.com/api/v1/admin/trigger-job-fetch \
+  -H "Authorization: Bearer $ADMIN_TRIGGER_SECRET"
+```
+
+### JSearch Quota Reset (External Cron)
+
+Monthly quota reset (1st of each month):
+```bash
+curl -X POST https://your-backend.onrender.com/api/v1/admin/reset-jsearch-quota \
+  -H "Authorization: Bearer $ADMIN_TRIGGER_SECRET"
+```
+
 ### JSearch Quota
 - Free tier: 200 requests/month
 - Fetch runs once daily, max 6 requests per cycle
 - Monthly usage tracked in Redis key `jsearch:monthly_usage`
-- Auto-resets on 1st of each month via Celery beat
 
 ## License
 
