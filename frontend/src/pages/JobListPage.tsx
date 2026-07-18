@@ -49,11 +49,11 @@ export function JobListPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-(--color-text-primary) flex items-center gap-2">
-          <Briefcase className="w-6 h-6 text-(--color-accent)" />
+        <h1 className="text-xl font-semibold text-(--color-text-primary) flex items-center gap-2">
+          <Briefcase className="w-5 h-5 text-(--color-accent)" />
           Job Listings
         </h1>
-        <p className="text-sm text-(--color-text-secondary) mt-1">
+        <p className="text-sm text-(--color-text-muted) mt-0.5">
           {data?.total ?? 0} jobs found · Auto-refreshes every 30s
         </p>
       </div>
@@ -86,7 +86,7 @@ export function JobListPage() {
 
       {/* Error */}
       {error && (
-        <div className="p-4 bg-(--color-error-subtle) text-(--color-error) rounded-(--radius-md) text-sm">
+        <div className="p-4 bg-(--color-error-bg) text-(--color-error) rounded-(--radius-md) text-sm border border-(--color-error)/10">
           Failed to load jobs. Please try again.
         </div>
       )}
@@ -95,18 +95,18 @@ export function JobListPage() {
       {isLoading && (
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-20 bg-(--color-bg-card) rounded-(--radius-lg) animate-pulse border border-(--color-border-default)" />
+            <div key={i} className="h-20 bg-(--color-bg-elevated) rounded-(--radius-lg) animate-pulse" />
           ))}
         </div>
       )}
 
       {/* Job list */}
       {data && data.items.length > 0 && (
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {data.items.map((job) => (
             <div
               key={job.id}
-              className="group bg-(--color-bg-card) border border-(--color-border-default) rounded-(--radius-lg) p-4 hover:border-(--color-accent)/30 hover:shadow-(--shadow-glow) transition-all duration-200"
+              className="group bg-(--color-bg-card) border border-(--color-border-default) rounded-(--radius-lg) p-4 hover:border-(--color-accent)/20 hover:shadow-(--shadow-elevated) transition-all duration-200"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
@@ -141,9 +141,9 @@ export function JobListPage() {
                         <Globe className="w-3 h-3" /> {job.country}
                       </span>
                     )}
-                    <span className={`px-1.5 py-0.5 rounded text-xs ${
-                      job.sponsorship === 'yes' ? 'bg-(--color-success-subtle) text-(--color-success)' :
-                      job.sponsorship === 'no' ? 'bg-(--color-error-subtle) text-(--color-error)' :
+                    <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
+                      job.sponsorship === 'yes' ? 'bg-(--color-success-bg) text-(--color-success)' :
+                      job.sponsorship === 'no' ? 'bg-(--color-error-bg) text-(--color-error)' :
                       'bg-(--color-bg-elevated) text-(--color-text-muted)'
                     }`}>
                       {job.sponsorship === 'yes' ? '✅ Sponsors' :
@@ -167,10 +167,12 @@ export function JobListPage() {
 
       {/* Empty state */}
       {data && data.items.length === 0 && !isLoading && (
-        <div className="text-center py-16">
-          <Briefcase className="w-12 h-12 text-(--color-text-muted) mx-auto mb-3" />
-          <h3 className="text-lg font-medium text-(--color-text-primary)">No jobs found</h3>
-          <p className="text-sm text-(--color-text-secondary) mt-1">
+        <div className="text-center py-20">
+          <div className="w-14 h-14 rounded-2xl bg-(--color-bg-elevated) flex items-center justify-center mx-auto mb-4">
+            <Briefcase className="w-7 h-7 text-(--color-text-muted)" />
+          </div>
+          <h3 className="text-base font-medium text-(--color-text-primary)">No jobs found</h3>
+          <p className="text-sm text-(--color-text-muted) mt-1 max-w-sm mx-auto">
             Jobs will appear here after the daily fetch runs. Make sure you've set your target roles.
           </p>
         </div>
@@ -182,17 +184,17 @@ export function JobListPage() {
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="px-3 py-1.5 text-sm bg-(--color-bg-card) border border-(--color-border-default) rounded-(--radius-md) text-(--color-text-secondary) hover:bg-(--color-bg-hover) disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="px-3.5 py-1.5 text-sm bg-(--color-bg-card) border border-(--color-border-default) rounded-(--radius-md) text-(--color-text-secondary) hover:bg-(--color-bg-hover) hover:text-(--color-text-primary) disabled:opacity-40 disabled:cursor-not-allowed transition-all"
           >
             Previous
           </button>
-          <span className="text-sm text-(--color-text-muted) tabular-nums">
+          <span className="text-sm text-(--color-text-muted) tabular-nums px-2">
             Page {page} of {totalPages}
           </span>
           <button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
-            className="px-3 py-1.5 text-sm bg-(--color-bg-card) border border-(--color-border-default) rounded-(--radius-md) text-(--color-text-secondary) hover:bg-(--color-bg-hover) disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="px-3.5 py-1.5 text-sm bg-(--color-bg-card) border border-(--color-border-default) rounded-(--radius-md) text-(--color-text-secondary) hover:bg-(--color-bg-hover) hover:text-(--color-text-primary) disabled:opacity-40 disabled:cursor-not-allowed transition-all"
           >
             Next
           </button>

@@ -186,3 +186,70 @@ The extension acts as a silent background parser:
 1. **Content Script:** Injects a `MutationObserver` on LinkedIn feeds, checking posts against hiring keyword regexes.
 2. **Deduplication:** Maintains an in-memory set of post URLs to prevent duplicate ingestions.
 3. **API Relay:** Sends matched posts to the backend's `/linkedin-posts/ingest` endpoint using a long-lived extension API token (`jaa_...`).
+
+---
+
+## 7. Visual Design System
+
+The frontend uses a **light, professional theme** inspired by Linear, Notion, and Vercel. All tokens are defined as CSS custom properties in `index.css` via Tailwind v4's `@theme` directive.
+
+### 7.1 Color Palette
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--color-bg-page` | `#F8F9FB` | Page background (off-white) |
+| `--color-bg-surface` | `#FFFFFF` | Surface/panel background |
+| `--color-bg-card` | `#FFFFFF` | Card backgrounds |
+| `--color-bg-elevated` | `#F1F3F5` | Elevated surfaces, loading skeletons |
+| `--color-bg-sidebar` | `#FAFBFC` | Sidebar navigation |
+| `--color-text-primary` | `#1A1D23` | Headings, body text |
+| `--color-text-secondary` | `#5F6B7A` | Descriptions, metadata |
+| `--color-text-muted` | `#9CA3AF` | Captions, placeholders |
+| `--color-accent` | `#6366F1` | Primary buttons, active nav, links |
+| `--color-accent-hover` | `#4F46E5` | Hovered accent elements |
+| `--color-border-default` | `#E5E7EB` | Card/input borders |
+| `--color-border-subtle` | `#F0F0F3` | Very light separators |
+
+### 7.2 Semantic Status Colors
+
+Each status color has three variants: a strong foreground, a light background (for badge pills), and a subtle transparent (for overlays).
+
+| Status | Foreground | Background | Example |
+|--------|-----------|------------|---------|
+| Success | `#16A34A` | `#F0FDF4` | "Connected" badge |
+| Warning | `#D97706` | `#FFFBEB` | "Needs Re-auth" badge |
+| Error | `#DC2626` | `#FEF2F2` | "Error" badge |
+| Info | `#2563EB` | `#EFF6FF` | "Extension" source badge |
+
+### 7.3 Typography
+
+- **Font:** Inter (with system-ui fallback)
+- **Headings:** `font-semibold`, `text-xl` (page titles), `text-base` (card titles)
+- **Body:** `text-sm` (14px) — primary content size
+- **Caption:** `text-xs` (12px) — metadata, timestamps
+
+### 7.4 Spacing & Layout
+
+- **Page padding:** `2rem` (`--spacing-page`)
+- **Card padding:** `1.5rem` (p-6)
+- **Card gap:** `1.5rem` (space-y-6) between sections
+- **Sidebar width:** `15rem` (w-60), flex-shrink-0, no position:fixed
+- **Main content:** flex-1, independent overflow-y scroll
+
+### 7.5 Shadows
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--shadow-card` | `0 1px 3px rgba(0,0,0,0.04)` | Cards, filter bar |
+| `--shadow-elevated` | `0 4px 12px rgba(0,0,0,0.06)` | Hover states, login card |
+| `--shadow-glow` | `0 0 0 3px rgba(99,102,241,0.12)` | Focus rings on inputs |
+
+### 7.6 Component Patterns
+
+- **Buttons (primary):** `bg-accent` + `text-inverse` + `shadow-sm`, hover darkens
+- **Buttons (secondary/ghost):** `text-secondary`, no border, hover changes text color
+- **Status badges:** Pill shape (`rounded-full`), light background + dark text (e.g., green-50 bg + green-600 text), with a small colored dot indicator
+- **Score badges:** Same pill pattern, color-coded by score tier (≥80 green, ≥60 blue, ≥40 amber, <40 red)
+- **Inputs:** White bg, light border, subtle focus glow ring, muted placeholder
+- **Cards:** White bg on off-white page, subtle border, soft shadow — no heavy borders
+

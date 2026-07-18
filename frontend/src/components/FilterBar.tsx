@@ -14,7 +14,7 @@ export function FilterBar({
   children,
 }: FilterBarProps) {
   return (
-    <div className="flex flex-wrap items-center gap-3 p-4 bg-(--color-bg-card) rounded-(--radius-lg) border border-(--color-border-default) shadow-(--shadow-card)">
+    <div className="flex flex-wrap items-center gap-3 p-3.5 bg-(--color-bg-card) rounded-(--radius-lg) border border-(--color-border-default) shadow-(--shadow-card)">
       {/* Search */}
       <div className="relative flex-1 min-w-[200px]">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-(--color-text-muted)" />
@@ -23,16 +23,16 @@ export function FilterBar({
           value={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={searchPlaceholder}
-          className="w-full pl-9 pr-3 py-2 bg-(--color-bg-input) border border-(--color-border-default) rounded-(--radius-md) text-sm text-(--color-text-primary) placeholder:text-(--color-text-muted) focus:border-(--color-border-focus) focus:outline-none transition-colors"
+          className="w-full pl-9 pr-3 py-2 bg-(--color-bg-elevated) border border-(--color-border-subtle) rounded-(--radius-md) text-sm text-(--color-text-primary) placeholder:text-(--color-text-muted) focus:border-(--color-border-focus) focus:outline-none focus:shadow-(--shadow-glow) transition-all"
         />
       </div>
 
       {/* Filter controls */}
       {children && (
         <>
-          <div className="h-6 w-px bg-(--color-border-default)" />
-          <div className="flex items-center gap-2 text-(--color-text-muted)">
-            <SlidersHorizontal className="w-4 h-4" />
+          <div className="h-5 w-px bg-(--color-border-default)" />
+          <div className="flex items-center gap-1.5 text-(--color-text-muted)">
+            <SlidersHorizontal className="w-3.5 h-3.5" />
           </div>
           {children}
         </>
@@ -53,7 +53,7 @@ export function SelectFilter({ value, onChange, options, placeholder }: SelectFi
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="px-3 py-2 bg-(--color-bg-input) border border-(--color-border-default) rounded-(--radius-md) text-sm text-(--color-text-primary) focus:border-(--color-border-focus) focus:outline-none transition-colors cursor-pointer"
+      className="px-3 py-2 bg-(--color-bg-elevated) border border-(--color-border-subtle) rounded-(--radius-md) text-sm text-(--color-text-primary) focus:border-(--color-border-focus) focus:outline-none focus:shadow-(--shadow-glow) transition-all cursor-pointer"
     >
       {placeholder && <option value="">{placeholder}</option>}
       {options.map((opt) => (

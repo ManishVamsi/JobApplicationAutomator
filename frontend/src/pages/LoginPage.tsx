@@ -50,23 +50,22 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-(--color-bg-primary) p-4">
-      {/* Background glow effect */}
+    <div className="min-h-screen flex items-center justify-center bg-(--color-bg-page) p-4">
+      {/* Subtle background gradient */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-(--color-accent) opacity-5 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500 opacity-5 rounded-full blur-[120px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-indigo-50 to-transparent rounded-full blur-[80px] opacity-60" />
       </div>
 
-      <div className="relative w-full max-w-md">
+      <div className="relative w-full max-w-[420px]">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-(--color-accent) shadow-(--shadow-glow) mb-4">
-            <Zap className="w-8 h-8 text-white" />
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-(--color-accent) mb-4 shadow-(--shadow-elevated)">
+            <Zap className="w-7 h-7 text-(--color-text-inverse)" />
           </div>
-          <h1 className="text-2xl font-bold text-(--color-text-primary)">
+          <h1 className="text-2xl font-bold text-(--color-text-primary) tracking-tight">
             Job Application Assistant
           </h1>
-          <p className="text-(--color-text-secondary) mt-1">
+          <p className="text-(--color-text-secondary) text-sm mt-1.5">
             Sign in with your email to get started
           </p>
         </div>
@@ -87,13 +86,13 @@ export function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@company.com"
                     required
-                    className="w-full pl-10 pr-4 py-2.5 bg-(--color-bg-input) border border-(--color-border-default) rounded-(--radius-md) text-sm text-(--color-text-primary) placeholder:text-(--color-text-muted) focus:border-(--color-border-focus) focus:outline-none transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 bg-(--color-bg-input) border border-(--color-border-default) rounded-(--radius-md) text-sm text-(--color-text-primary) placeholder:text-(--color-text-muted) focus:border-(--color-border-focus) focus:outline-none focus:shadow-(--shadow-glow) transition-all"
                   />
                 </div>
               </div>
 
               {error && (
-                <p className="text-sm text-(--color-error) bg-(--color-error-subtle) px-3 py-2 rounded-(--radius-md)">
+                <p className="text-sm text-(--color-error) bg-(--color-error-bg) px-3 py-2 rounded-(--radius-md)">
                   {error}
                 </p>
               )}
@@ -101,7 +100,7 @@ export function LoginPage() {
               <button
                 type="submit"
                 disabled={loading || !email}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-(--color-accent) hover:bg-(--color-accent-hover) text-white font-medium rounded-(--radius-md) transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-(--color-accent) hover:bg-(--color-accent-hover) text-(--color-text-inverse) font-medium rounded-(--radius-md) transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -134,13 +133,13 @@ export function LoginPage() {
                     maxLength={6}
                     required
                     autoFocus
-                    className="w-full pl-10 pr-4 py-2.5 bg-(--color-bg-input) border border-(--color-border-default) rounded-(--radius-md) text-sm text-(--color-text-primary) placeholder:text-(--color-text-muted) text-center tracking-[0.4em] text-lg font-mono focus:border-(--color-border-focus) focus:outline-none transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 bg-(--color-bg-input) border border-(--color-border-default) rounded-(--radius-md) text-sm text-(--color-text-primary) placeholder:text-(--color-text-muted) text-center tracking-[0.4em] text-lg font-mono focus:border-(--color-border-focus) focus:outline-none focus:shadow-(--shadow-glow) transition-all"
                   />
                 </div>
               </div>
 
               {error && (
-                <p className="text-sm text-(--color-error) bg-(--color-error-subtle) px-3 py-2 rounded-(--radius-md)">
+                <p className="text-sm text-(--color-error) bg-(--color-error-bg) px-3 py-2 rounded-(--radius-md)">
                   {error}
                 </p>
               )}
@@ -148,7 +147,7 @@ export function LoginPage() {
               <button
                 type="submit"
                 disabled={loading || otp.length !== 6}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-(--color-accent) hover:bg-(--color-accent-hover) text-white font-medium rounded-(--radius-md) transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-(--color-accent) hover:bg-(--color-accent-hover) text-(--color-text-inverse) font-medium rounded-(--radius-md) transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

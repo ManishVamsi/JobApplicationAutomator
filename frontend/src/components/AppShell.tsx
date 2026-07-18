@@ -29,67 +29,67 @@ export function AppShell({ children }: AppShellProps) {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-(--color-bg-secondary) border-r border-(--color-border-default) flex flex-col fixed h-full z-10">
+    <div className="h-screen flex overflow-hidden">
+      {/* Sidebar — fixed-width flex child, not position:fixed */}
+      <aside className="w-60 flex-shrink-0 bg-(--color-bg-sidebar) border-r border-(--color-border-default) flex flex-col">
         {/* Logo */}
-        <div className="p-5 border-b border-(--color-border-default)">
+        <div className="px-5 py-5 border-b border-(--color-border-subtle)">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-(--radius-lg) bg-(--color-accent) flex items-center justify-center shadow-(--shadow-glow)">
-              <Zap className="w-5 h-5 text-white" />
+            <div className="w-8 h-8 rounded-(--radius-lg) bg-(--color-accent) flex items-center justify-center">
+              <Zap className="w-4 h-4 text-(--color-text-inverse)" />
             </div>
             <div>
-              <h1 className="text-base font-bold text-(--color-text-primary) tracking-tight">
+              <h1 className="text-sm font-semibold text-(--color-text-primary) tracking-tight leading-tight">
                 JobApp
               </h1>
-              <p className="text-xs text-(--color-text-muted)">Assistant</p>
+              <p className="text-[11px] text-(--color-text-muted) leading-tight">Assistant</p>
             </div>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-3 space-y-1">
+        <nav className="flex-1 px-3 py-4 space-y-0.5">
           {navItems.map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}
               to={to}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-(--radius-md) text-sm font-medium transition-all duration-150 ${
+                `flex items-center gap-2.5 px-3 py-2 rounded-(--radius-md) text-[13px] font-medium transition-all duration-150 ${
                   isActive
-                    ? 'bg-(--color-accent-subtle) text-(--color-accent-hover) shadow-sm'
+                    ? 'bg-(--color-accent-light) text-(--color-accent) shadow-sm'
                     : 'text-(--color-text-secondary) hover:bg-(--color-bg-hover) hover:text-(--color-text-primary)'
                 }`
               }
             >
-              <Icon className="w-4.5 h-4.5" />
+              <Icon className="w-4 h-4" />
               {label}
             </NavLink>
           ))}
         </nav>
 
         {/* User section */}
-        <div className="p-3 border-t border-(--color-border-default)">
-          <div className="px-3 py-2 mb-2">
-            <p className="text-sm font-medium text-(--color-text-primary) truncate">
+        <div className="px-3 py-3 border-t border-(--color-border-subtle)">
+          <div className="px-3 py-2 mb-1">
+            <p className="text-[13px] font-medium text-(--color-text-primary) truncate">
               {user?.name || user?.email || 'User'}
             </p>
-            <p className="text-xs text-(--color-text-muted) truncate">
+            <p className="text-[11px] text-(--color-text-muted) truncate">
               {user?.email}
             </p>
           </div>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 w-full px-3 py-2 rounded-(--radius-md) text-sm text-(--color-text-secondary) hover:bg-(--color-error-subtle) hover:text-(--color-error) transition-all"
+            className="flex items-center gap-2 w-full px-3 py-2 rounded-(--radius-md) text-[13px] text-(--color-text-secondary) hover:bg-(--color-error-subtle) hover:text-(--color-error) transition-all"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-3.5 h-3.5" />
             Sign Out
           </button>
         </div>
       </aside>
 
-      {/* Main content */}
-      <main className="flex-1 ml-64">
-        <div className="p-(--spacing-page) max-w-7xl mx-auto">
+      {/* Main content — fills remaining space with independent scroll */}
+      <main className="flex-1 overflow-y-auto">
+        <div className="p-(--spacing-page) max-w-5xl mx-auto">
           {children}
         </div>
       </main>

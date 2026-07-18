@@ -5,50 +5,50 @@ interface StatusBadgeProps {
   className?: string;
 }
 
-const statusConfig: Record<string, { label: string; className: string }> = {
+const statusConfig: Record<string, { label: string; dotClass: string; badgeClass: string }> = {
   connected: {
     label: 'Connected',
-    className: 'bg-(--color-success-subtle) text-(--color-success)',
+    dotClass: 'bg-(--color-success)',
+    badgeClass: 'bg-(--color-success-bg) text-(--color-success)',
   },
   error: {
     label: 'Error',
-    className: 'bg-(--color-error-subtle) text-(--color-error)',
+    dotClass: 'bg-(--color-error)',
+    badgeClass: 'bg-(--color-error-bg) text-(--color-error)',
   },
   needs_reauth: {
     label: 'Needs Re-auth',
-    className: 'bg-(--color-warning-subtle) text-(--color-warning)',
+    dotClass: 'bg-(--color-warning)',
+    badgeClass: 'bg-(--color-warning-bg) text-(--color-warning)',
   },
   disconnected: {
     label: 'Disconnected',
-    className: 'bg-(--color-bg-elevated) text-(--color-text-muted)',
+    dotClass: 'bg-(--color-text-muted)',
+    badgeClass: 'bg-(--color-bg-elevated) text-(--color-text-secondary)',
   },
   pending: {
     label: 'Pending',
-    className: 'bg-(--color-info-subtle) text-(--color-info)',
+    dotClass: 'bg-(--color-info)',
+    badgeClass: 'bg-(--color-info-bg) text-(--color-info)',
   },
 };
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {
   const config = statusConfig[status] || {
     label: status,
-    className: 'bg-(--color-bg-elevated) text-(--color-text-muted)',
+    dotClass: 'bg-(--color-text-muted)',
+    badgeClass: 'bg-(--color-bg-elevated) text-(--color-text-secondary)',
   };
 
   return (
     <span
       className={cn(
         'inline-flex items-center px-2.5 py-0.5 rounded-(--radius-full) text-xs font-medium',
-        config.className,
+        config.badgeClass,
         className
       )}
     >
-      <span className={cn(
-        'w-1.5 h-1.5 rounded-full mr-1.5',
-        status === 'connected' ? 'bg-(--color-success)' :
-        status === 'error' ? 'bg-(--color-error)' :
-        status === 'needs_reauth' ? 'bg-(--color-warning)' :
-        'bg-(--color-text-muted)'
-      )} />
+      <span className={cn('w-1.5 h-1.5 rounded-full mr-1.5', config.dotClass)} />
       {config.label}
     </span>
   );
