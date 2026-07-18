@@ -254,6 +254,9 @@ async def run_fetch_jobs_for_all_users() -> dict:
                     )
 
             await db.commit()
+
+        # Record fetch timestamp once per cycle (even if zero jobs found)
+        await redis.set("jsearch:last_fetch_at", datetime.now(UTC).isoformat())
     finally:
         await redis.close()
 
