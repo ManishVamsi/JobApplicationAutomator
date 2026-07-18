@@ -51,6 +51,7 @@ class Settings(BaseSettings):
     # Free tier: 100 emails/day — re-verify at https://resend.com/pricing
     RESEND_API_KEY: str = ""
     RESEND_DAILY_LIMIT: int = 100
+    RESEND_FROM_EMAIL: str = "Job App Assistant <onboarding@resend.dev>"
 
     # --- JSearch API ---
     # Free tier: 200 req/month — re-verify at https://rapidapi.com
