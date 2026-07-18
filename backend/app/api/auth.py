@@ -7,7 +7,7 @@ All cookie flags are environment-conditional:
 
 from datetime import UTC, datetime
 
-from fastapi import APIRouter, HTTPException, Request, Response, status
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, Response, status
 from jwt.exceptions import InvalidTokenError
 
 from app.api.deps import DbSession, Limiter, Redis
@@ -21,6 +21,7 @@ from app.core.security import (
 )
 from app.models.user import User
 from app.schemas.auth import MessageResponse, OTPRequest, OTPVerify, TokenResponse
+from app.services.email_service import get_email_service
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 settings = get_settings()
@@ -79,6 +80,7 @@ def _clear_refresh_cookie(response: Response) -> None:
 async def request_otp(
     body: OTPRequest,
     request: Request,
+    background_tasks: BackgroundTasks,
     redis: Redis,
     limiter: Limiter,
 ) -> MessageResponse:
@@ -107,15 +109,9 @@ async def request_otp(
     attempts_key = f"{OTP_ATTEMPTS_KEY_PREFIX}{body.email}"
     await redis.delete(attempts_key)
 
-    # Send OTP via email (or console in local dev)
-    if settings.is_local:
-        from app.core.logging import get_logger
-
-        logger = get_logger("auth")
-        logger.info("OTP for local dev", email=body.email, code=code)
-    else:
-        # TODO: Send via ResendEmailService
-        pass
+    # Send OTP via email (ConsoleEmailService for local dev, ResendEmailService for prod)
+    email_service = get_email_service()
+    background_tasks.add_task(email_service.send_otp, body.email, code)
 
     return MessageResponse(message="OTP sent to your email")
 
